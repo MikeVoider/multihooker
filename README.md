@@ -3,6 +3,7 @@
 **Fishing, but with crates.**
 
 [![Download on CurseForge](https://img.shields.io/badge/CurseForge-Download-F16436?logo=curseforge&logoColor=white)](https://www.curseforge.com/minecraft/mc-mods/multihooker)
+[![Latest release](https://img.shields.io/github/v/release/MikeVoider/multihooker?label=GitHub%20release&color=2ea44f)](https://github.com/MikeVoider/multihooker/releases)
 [![YouTube](https://img.shields.io/badge/YouTube-@MikeVoider-FF0000?logo=youtube&logoColor=white)](https://www.youtube.com/@MikeVoider)
 
 MultiHooker casts several fishing hooks with a single cast. The vanilla bobber goes
@@ -72,7 +73,8 @@ Optional integrations:
 
 ## Installation
 
-Download the latest jar from **[CurseForge](https://www.curseforge.com/minecraft/mc-mods/multihooker)**.
+Download the latest jar from **[CurseForge](https://www.curseforge.com/minecraft/mc-mods/multihooker)**,
+or grab it from the **[releases page](https://github.com/MikeVoider/multihooker/releases)**.
 
 1. Install [NeoForge](https://neoforged.net/) for Minecraft 1.21.1.
 2. Drop `multihooker-<version>.jar` into your `mods` folder.
