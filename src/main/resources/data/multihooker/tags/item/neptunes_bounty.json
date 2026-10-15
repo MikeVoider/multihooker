@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "aquaculture:neptunes_bounty",
+      "required": false
+    }
+  ]
+}

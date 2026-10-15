@@ -1,0 +1,183 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": {
+        "min": 3,
+        "max": 5
+      },
+      "entries": [
+        {
+          "type": "minecraft:tag",
+          "name": "c:gems",
+          "expand": true,
+          "weight": 18
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond",
+          "weight": 18,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 2,
+                "max": 5
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:emerald",
+          "weight": 14,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 6,
+                "max": 12
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:experience_bottle",
+          "weight": 12,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 4,
+                "max": 8
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:golden_apple",
+          "weight": 12,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:netherite_ingot",
+          "weight": 8,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 1
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:heart_of_the_sea",
+          "weight": 6,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 1
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:enchanted_golden_apple",
+          "weight": 6,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 1
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:enchanted_book",
+          "weight": 8,
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "min": 1,
+        "max": 1
+      },
+      "entries": [
+        {
+          "type": "minecraft:tag",
+          "name": "c:raw_materials",
+          "expand": true,
+          "weight": 10
+        },
+        {
+          "type": "minecraft:tag",
+          "name": "c:dusts",
+          "expand": true,
+          "weight": 10
+        },
+        {
+          "type": "minecraft:tag",
+          "name": "c:nuggets",
+          "expand": true,
+          "weight": 10
+        },
+        {
+          "type": "minecraft:tag",
+          "name": "c:gems",
+          "expand": true,
+          "weight": 10
+        },
+        {
+          "type": "minecraft:tag",
+          "name": "c:foods/cooked_meat",
+          "expand": true,
+          "weight": 10
+        },
+        {
+          "type": "minecraft:tag",
+          "name": "c:ingots",
+          "expand": true,
+          "weight": 10
+        },
+        {
+          "type": "minecraft:tag",
+          "name": "c:ores",
+          "expand": true,
+          "weight": 10
+        },
+        {
+          "type": "minecraft:tag",
+          "name": "c:storage_blocks",
+          "expand": true,
+          "weight": 10
+        }
+      ]
+    }
+  ]
+}

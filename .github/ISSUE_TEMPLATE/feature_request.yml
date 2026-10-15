@@ -1,0 +1,20 @@
+name: Feature request
+description: Suggest a new feature or a change to an existing one.
+title: "[Feature] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would you like?
+      description: Describe the feature or change.
+    validations:
+      required: true
+
+  - type: textarea
+    id: why
+    attributes:
+      label: Why would this be good?
+      description: How does it fit the mod? Is there anything it should not break?
+    validations:
+      required: false

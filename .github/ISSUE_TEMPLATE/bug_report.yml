@@ -1,0 +1,82 @@
+name: Bug report
+description: Something is broken or not working as it should.
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report! Please fill in as much as you can — a report with the
+        log and the steps is far easier to fix than "it doesn't work".
+
+  - type: input
+    id: mod_version
+    attributes:
+      label: MultiHooker version
+      description: Shown in the Minecraft mods list.
+      placeholder: "3.10.5"
+    validations:
+      required: true
+
+  - type: input
+    id: mc_neoforge
+    attributes:
+      label: Minecraft + NeoForge version
+      placeholder: "1.21.1 / NeoForge 21.1.252"
+    validations:
+      required: true
+
+  - type: textarea
+    id: what_happened
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, and what happened instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. ...
+        2. ...
+        3. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: log
+    attributes:
+      label: Log / crash report
+      description: |
+        Paste the relevant part here, or link to a paste site (mclo.gs, gist, pastebin).
+      render: text
+    validations:
+      required: false
+
+  - type: textarea
+    id: other_mods
+    attributes:
+      label: Other mods installed
+      description: The modpack name, or a list of the other mods you use.
+    validations:
+      required: false
+
+  - type: input
+    id: where
+    attributes:
+      label: Singleplayer or a server?
+      placeholder: "Singleplayer, or a server (which one?)"
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Before you post
+      options:
+        - label: I am on Minecraft 1.21.1 and the latest MultiHooker version.
+          required: true
+        - label: I searched the existing issues and did not find a duplicate.
+          required: true

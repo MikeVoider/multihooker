@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=south": {
+      "model": "multihooker:block/godly_crate_body"
+    },
+    "facing=west": {
+      "model": "multihooker:block/godly_crate_body",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "multihooker:block/godly_crate_body",
+      "y": 180
+    },
+    "facing=east": {
+      "model": "multihooker:block/godly_crate_body",
+      "y": 270
+    }
+  }
+}

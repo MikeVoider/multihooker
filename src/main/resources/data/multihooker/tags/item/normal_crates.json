@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "multihooker:common_crate",
+    "multihooker:uncommon_crate",
+    "multihooker:rare_crate",
+    "multihooker:epic_crate",
+    "multihooker:legendary_crate",
+    "multihooker:godly_crate",
+    "multihooker:mythic_crate",
+    "multihooker:secret_crate"
+  ]
+}

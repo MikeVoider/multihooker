@@ -1,0 +1,15 @@
+{
+  "required": false,
+  "minVersion": "0.8",
+  "package": "com.example.multihooker.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "AquaFishingBobberMixin"
+  ],
+  "client": [
+    "client.AquaBobberRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 0
+  }
+}

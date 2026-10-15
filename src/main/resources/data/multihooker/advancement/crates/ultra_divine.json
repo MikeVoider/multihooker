@@ -1,0 +1,15 @@
+{
+  "parent": "multihooker:crates/divine",
+  "display": {
+    "icon": { "count": 1, "id": "multihooker:ultra_divine_crate" },
+    "title": { "translate": "advancements.multihooker.crates.ultra_divine.title" },
+    "description": { "translate": "advancements.multihooker.crates.ultra_divine.description" },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "fished": { "trigger": "minecraft:impossible" }
+  }
+}

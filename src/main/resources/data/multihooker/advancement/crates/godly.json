@@ -1,0 +1,15 @@
+{
+  "parent": "multihooker:crates/legendary",
+  "display": {
+    "icon": { "count": 1, "id": "multihooker:godly_crate" },
+    "title": { "translate": "advancements.multihooker.crates.godly.title" },
+    "description": { "translate": "advancements.multihooker.crates.godly.description" },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "fished": { "trigger": "minecraft:impossible" }
+  }
+}

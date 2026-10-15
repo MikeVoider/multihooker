@@ -1,0 +1,15 @@
+{
+  "display": {
+    "icon": { "count": 1, "id": "multihooker:aquakey" },
+    "title": { "translate": "advancements.multihooker.crates.root.title" },
+    "description": { "translate": "advancements.multihooker.crates.root.description" },
+    "frame": "task",
+    "background": "minecraft:textures/gui/advancements/backgrounds/husbandry.png",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "tick": { "trigger": "minecraft:tick" }
+  }
+}

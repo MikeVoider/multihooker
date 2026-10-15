@@ -1,0 +1,1251 @@
+{
+  "tiers": [
+    {
+      "key": "common",
+      "group": "normal",
+      "rolls": [
+        1,
+        2
+      ],
+      "entries": [
+        {
+          "kind": "item",
+          "id": "minecraft:oak_log",
+          "weight": 20,
+          "min": 3,
+          "max": 8
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:coal",
+          "weight": 18,
+          "min": 2,
+          "max": 6
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:iron_ingot",
+          "weight": 18,
+          "min": 1,
+          "max": 3
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:stick",
+          "weight": 15,
+          "min": 4,
+          "max": 10
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:bread",
+          "weight": 15,
+          "min": 1,
+          "max": 3
+        }
+      ],
+      "bonus_entries": [
+        {
+          "kind": "tag",
+          "id": "c:raw_materials",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:dusts",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:nuggets",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:gems",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:foods/cooked_meat",
+          "weight": 10
+        }
+      ]
+    },
+    {
+      "key": "uncommon",
+      "group": "normal",
+      "rolls": [
+        1,
+        3
+      ],
+      "entries": [
+        {
+          "kind": "item",
+          "id": "minecraft:iron_ingot",
+          "weight": 20,
+          "min": 2,
+          "max": 5
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:gold_ingot",
+          "weight": 16,
+          "min": 1,
+          "max": 3
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:copper_ingot",
+          "weight": 15,
+          "min": 3,
+          "max": 8
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:coal",
+          "weight": 15,
+          "min": 3,
+          "max": 8
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:string",
+          "weight": 12,
+          "min": 2,
+          "max": 6
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:leather",
+          "weight": 10,
+          "min": 1,
+          "max": 3
+        }
+      ],
+      "bonus_entries": [
+        {
+          "kind": "tag",
+          "id": "c:raw_materials",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:dusts",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:nuggets",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:gems",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:foods/cooked_meat",
+          "weight": 10
+        }
+      ]
+    },
+    {
+      "key": "rare",
+      "group": "normal",
+      "rolls": [
+        2,
+        3
+      ],
+      "entries": [
+        {
+          "kind": "item",
+          "id": "minecraft:gold_ingot",
+          "weight": 20,
+          "min": 2,
+          "max": 5
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:lapis_lazuli",
+          "weight": 16,
+          "min": 4,
+          "max": 10
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:diamond",
+          "weight": 14,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:emerald",
+          "weight": 14,
+          "min": 2,
+          "max": 5
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:iron_ingot",
+          "weight": 12,
+          "min": 4,
+          "max": 8
+        },
+        {
+          "kind": "book",
+          "id": "minecraft:enchanted_book",
+          "weight": 10
+        }
+      ],
+      "bonus_entries": [
+        {
+          "kind": "tag",
+          "id": "c:raw_materials",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:dusts",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:nuggets",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:gems",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:foods/cooked_meat",
+          "weight": 10
+        }
+      ]
+    },
+    {
+      "key": "epic",
+      "group": "normal",
+      "rolls": [
+        2,
+        4
+      ],
+      "entries": [
+        {
+          "kind": "item",
+          "id": "minecraft:gold_ingot",
+          "weight": 18,
+          "min": 3,
+          "max": 6
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:emerald",
+          "weight": 16,
+          "min": 3,
+          "max": 6
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:diamond",
+          "weight": 14,
+          "min": 1,
+          "max": 3
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:lapis_lazuli",
+          "weight": 12,
+          "min": 6,
+          "max": 12
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:experience_bottle",
+          "weight": 12,
+          "min": 2,
+          "max": 4
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:golden_apple",
+          "weight": 10,
+          "min": 1,
+          "max": 1
+        },
+        {
+          "kind": "book",
+          "id": "minecraft:enchanted_book",
+          "weight": 10
+        }
+      ],
+      "bonus_entries": [
+        {
+          "kind": "tag",
+          "id": "c:raw_materials",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:dusts",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:nuggets",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:gems",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:foods/cooked_meat",
+          "weight": 10
+        }
+      ]
+    },
+    {
+      "key": "legendary",
+      "group": "normal",
+      "rolls": [
+        2,
+        4
+      ],
+      "entries": [
+        {
+          "kind": "item",
+          "id": "minecraft:diamond",
+          "weight": 18,
+          "min": 1,
+          "max": 3
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:emerald",
+          "weight": 16,
+          "min": 4,
+          "max": 8
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:experience_bottle",
+          "weight": 14,
+          "min": 2,
+          "max": 5
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:golden_apple",
+          "weight": 12,
+          "min": 1,
+          "max": 1
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:netherite_scrap",
+          "weight": 10,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:ender_pearl",
+          "weight": 10,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "kind": "book",
+          "id": "minecraft:enchanted_book",
+          "weight": 10
+        }
+      ],
+      "bonus_entries": [
+        {
+          "kind": "tag",
+          "id": "c:raw_materials",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:dusts",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:nuggets",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:gems",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:foods/cooked_meat",
+          "weight": 10
+        }
+      ]
+    },
+    {
+      "key": "godly",
+      "group": "normal",
+      "rolls": [
+        3,
+        5
+      ],
+      "entries": [
+        {
+          "kind": "tag",
+          "id": "c:gems",
+          "weight": 18
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:diamond",
+          "weight": 18,
+          "min": 2,
+          "max": 5
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:emerald",
+          "weight": 14,
+          "min": 6,
+          "max": 12
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:experience_bottle",
+          "weight": 12,
+          "min": 4,
+          "max": 8
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:golden_apple",
+          "weight": 12,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:netherite_ingot",
+          "weight": 8,
+          "min": 1,
+          "max": 1
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:heart_of_the_sea",
+          "weight": 6,
+          "min": 1,
+          "max": 1
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:enchanted_golden_apple",
+          "weight": 6,
+          "min": 1,
+          "max": 1
+        },
+        {
+          "kind": "book",
+          "id": "minecraft:enchanted_book",
+          "weight": 8
+        }
+      ],
+      "bonus_entries": [
+        {
+          "kind": "tag",
+          "id": "c:raw_materials",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:dusts",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:nuggets",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:gems",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:foods/cooked_meat",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:ingots",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:ores",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:storage_blocks",
+          "weight": 10
+        }
+      ]
+    },
+    {
+      "key": "mythic",
+      "group": "normal",
+      "rolls": [
+        3,
+        6
+      ],
+      "entries": [
+        {
+          "kind": "tag",
+          "id": "c:gems",
+          "weight": 18
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:diamond",
+          "weight": 18,
+          "min": 3,
+          "max": 6
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:emerald",
+          "weight": 14,
+          "min": 7,
+          "max": 14
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:experience_bottle",
+          "weight": 12,
+          "min": 5,
+          "max": 9
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:golden_apple",
+          "weight": 12,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:netherite_ingot",
+          "weight": 9,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:heart_of_the_sea",
+          "weight": 7,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:enchanted_golden_apple",
+          "weight": 6,
+          "min": 1,
+          "max": 1
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:nautilus_shell",
+          "weight": 6,
+          "min": 1,
+          "max": 3
+        },
+        {
+          "kind": "book",
+          "id": "minecraft:enchanted_book",
+          "weight": 8
+        }
+      ],
+      "bonus_entries": [
+        {
+          "kind": "tag",
+          "id": "c:raw_materials",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:dusts",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:nuggets",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:gems",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:foods/cooked_meat",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:ingots",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:ores",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:storage_blocks",
+          "weight": 10
+        }
+      ]
+    },
+    {
+      "key": "secret",
+      "group": "normal",
+      "rolls": [
+        3,
+        6
+      ],
+      "entries": [
+        {
+          "kind": "tag",
+          "id": "c:gems",
+          "weight": 18
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:diamond",
+          "weight": 18,
+          "min": 3,
+          "max": 6
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:emerald",
+          "weight": 14,
+          "min": 8,
+          "max": 16
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:experience_bottle",
+          "weight": 12,
+          "min": 5,
+          "max": 10
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:golden_apple",
+          "weight": 12,
+          "min": 2,
+          "max": 3
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:netherite_ingot",
+          "weight": 10,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:heart_of_the_sea",
+          "weight": 8,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:enchanted_golden_apple",
+          "weight": 8,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:nautilus_shell",
+          "weight": 8,
+          "min": 2,
+          "max": 4
+        },
+        {
+          "kind": "book",
+          "id": "minecraft:enchanted_book",
+          "weight": 8
+        }
+      ],
+      "bonus_entries": [
+        {
+          "kind": "tag",
+          "id": "c:raw_materials",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:dusts",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:nuggets",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:gems",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:foods/cooked_meat",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:ingots",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:ores",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:storage_blocks",
+          "weight": 10
+        }
+      ]
+    },
+    {
+      "key": "divine",
+      "group": "special",
+      "rolls": [
+        4,
+        6
+      ],
+      "entries": [
+        {
+          "kind": "tag",
+          "id": "c:gems",
+          "weight": 18
+        },
+        {
+          "kind": "tag",
+          "id": "c:ingots",
+          "weight": 12
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:diamond",
+          "weight": 16,
+          "min": 4,
+          "max": 8
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:emerald",
+          "weight": 14,
+          "min": 10,
+          "max": 20
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:experience_bottle",
+          "weight": 12,
+          "min": 6,
+          "max": 12
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:golden_apple",
+          "weight": 12,
+          "min": 2,
+          "max": 4
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:netherite_ingot",
+          "weight": 10,
+          "min": 2,
+          "max": 3
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:heart_of_the_sea",
+          "weight": 8,
+          "min": 2,
+          "max": 3
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:enchanted_golden_apple",
+          "weight": 8,
+          "min": 1,
+          "max": 3
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:totem_of_undying",
+          "weight": 5,
+          "min": 1,
+          "max": 1
+        },
+        {
+          "kind": "book",
+          "id": "minecraft:enchanted_book",
+          "weight": 8
+        }
+      ],
+      "bonus_entries": [
+        {
+          "kind": "tag",
+          "id": "c:raw_materials",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:dusts",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:nuggets",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:gems",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:foods/cooked_meat",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:ingots",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:ores",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:storage_blocks",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "multihooker:neptunes_bounty",
+          "weight": 5,
+          "name": "Neptune's Bounty"
+        }
+      ]
+    },
+    {
+      "key": "ultra_divine",
+      "group": "special",
+      "rolls": [
+        4,
+        7
+      ],
+      "entries": [
+        {
+          "kind": "tag",
+          "id": "c:gems",
+          "weight": 18
+        },
+        {
+          "kind": "tag",
+          "id": "c:ingots",
+          "weight": 12
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:diamond",
+          "weight": 16,
+          "min": 5,
+          "max": 10
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:emerald",
+          "weight": 14,
+          "min": 12,
+          "max": 24
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:experience_bottle",
+          "weight": 12,
+          "min": 8,
+          "max": 16
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:golden_apple",
+          "weight": 12,
+          "min": 3,
+          "max": 5
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:netherite_ingot",
+          "weight": 10,
+          "min": 2,
+          "max": 4
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:heart_of_the_sea",
+          "weight": 8,
+          "min": 2,
+          "max": 4
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:enchanted_golden_apple",
+          "weight": 8,
+          "min": 2,
+          "max": 3
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:totem_of_undying",
+          "weight": 6,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:diamond_block",
+          "weight": 6,
+          "min": 1,
+          "max": 1
+        },
+        {
+          "kind": "book",
+          "id": "minecraft:enchanted_book",
+          "weight": 8
+        }
+      ],
+      "bonus_entries": [
+        {
+          "kind": "tag",
+          "id": "c:raw_materials",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:dusts",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:nuggets",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:gems",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:foods/cooked_meat",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:ingots",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:ores",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:storage_blocks",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "multihooker:neptunes_bounty",
+          "weight": 5,
+          "name": "Neptune's Bounty"
+        }
+      ]
+    },
+    {
+      "key": "unspoken",
+      "group": "special",
+      "rolls": [
+        5,
+        8
+      ],
+      "entries": [
+        {
+          "kind": "tag",
+          "id": "c:gems",
+          "weight": 16
+        },
+        {
+          "kind": "tag",
+          "id": "c:ingots",
+          "weight": 12
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:diamond_block",
+          "weight": 12,
+          "min": 2,
+          "max": 3
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:netherite_ingot",
+          "weight": 12,
+          "min": 3,
+          "max": 5
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:experience_bottle",
+          "weight": 12,
+          "min": 10,
+          "max": 20
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:enchanted_golden_apple",
+          "weight": 10,
+          "min": 2,
+          "max": 4
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:totem_of_undying",
+          "weight": 10,
+          "min": 2,
+          "max": 3
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:shulker_shell",
+          "weight": 8,
+          "min": 2,
+          "max": 4
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:heart_of_the_sea",
+          "weight": 8,
+          "min": 2,
+          "max": 4
+        },
+        {
+          "kind": "book",
+          "id": "minecraft:enchanted_book",
+          "weight": 8
+        }
+      ],
+      "bonus_entries": [
+        {
+          "kind": "tag",
+          "id": "c:raw_materials",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:dusts",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:nuggets",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:gems",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:foods/cooked_meat",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:ingots",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:ores",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:storage_blocks",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "multihooker:neptunes_bounty",
+          "weight": 5,
+          "name": "Neptune's Bounty"
+        }
+      ]
+    },
+    {
+      "key": "ghost_unspoken",
+      "group": "special",
+      "rolls": [
+        6,
+        9
+      ],
+      "entries": [
+        {
+          "kind": "tag",
+          "id": "c:gems",
+          "weight": 14
+        },
+        {
+          "kind": "tag",
+          "id": "c:ingots",
+          "weight": 10
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:diamond_block",
+          "weight": 12,
+          "min": 3,
+          "max": 6
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:netherite_block",
+          "weight": 10,
+          "min": 1,
+          "max": 3
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:totem_of_undying",
+          "weight": 10,
+          "min": 3,
+          "max": 4
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:enchanted_golden_apple",
+          "weight": 10,
+          "min": 3,
+          "max": 5
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:experience_bottle",
+          "weight": 10,
+          "min": 16,
+          "max": 32
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:heart_of_the_sea",
+          "weight": 8,
+          "min": 3,
+          "max": 5
+        },
+        {
+          "kind": "item",
+          "id": "minecraft:nether_star",
+          "weight": 2,
+          "min": 1,
+          "max": 2
+        }
+      ],
+      "bonus_entries": [
+        {
+          "kind": "tag",
+          "id": "c:raw_materials",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:dusts",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:nuggets",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:gems",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:foods/cooked_meat",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:ingots",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:ores",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "c:storage_blocks",
+          "weight": 10
+        },
+        {
+          "kind": "tag",
+          "id": "multihooker:neptunes_bounty",
+          "weight": 5,
+          "name": "Neptune's Bounty"
+        }
+      ]
+    }
+  ]
+}

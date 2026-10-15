@@ -1,0 +1,51 @@
+modLoader = "javafml"
+loaderVersion = "[4,)"
+license = "MIT"
+
+[[mods]]
+modId = "multihooker"
+version = "${mod_version}"
+displayName = "MultiHooker"
+authors = "${mod_authors}"
+description = '''
+Cast several fishing hooks with a single fishing rod cast.
+The vanilla bobber is thrown as always, and one extra hook per configured extra
+is thrown with it so you can pull in multiple fish from one cast. Reeling in
+brings every hook back at once.
+'''
+
+[[mixins]]
+config = "multihooker.mixins.json"
+
+[[mixins]]
+config = "multihooker.aqua.mixins.json"
+
+[[dependencies.multihooker]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.multihooker]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.21.1,1.21.2)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.multihooker]]
+modId = "curios"
+type = "optional"
+versionRange = "[9,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.multihooker]]
+modId = "aquaculture"
+type = "optional"
+versionRange = "[2,)"
+ordering = "AFTER"
+side = "BOTH"
+
+

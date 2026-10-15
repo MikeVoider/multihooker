@@ -1,0 +1,15 @@
+{
+  "parent": "multihooker:crates/epic",
+  "display": {
+    "icon": { "count": 1, "id": "multihooker:legendary_crate" },
+    "title": { "translate": "advancements.multihooker.crates.legendary.title" },
+    "description": { "translate": "advancements.multihooker.crates.legendary.description" },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "fished": { "trigger": "minecraft:impossible" }
+  }
+}

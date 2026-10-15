@@ -1,0 +1,15 @@
+{
+  "parent": "multihooker:crates/unspoken",
+  "display": {
+    "icon": { "count": 1, "id": "multihooker:ghost_unspoken_crate" },
+    "title": { "translate": "advancements.multihooker.crates.ghost_unspoken.title" },
+    "description": { "translate": "advancements.multihooker.crates.ghost_unspoken.description" },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "fished": { "trigger": "minecraft:impossible" }
+  }
+}

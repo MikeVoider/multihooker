@@ -1,0 +1,15 @@
+{
+  "parent": "multihooker:crates/root",
+  "display": {
+    "icon": { "count": 1, "id": "multihooker:common_crate" },
+    "title": { "translate": "advancements.multihooker.crates.common.title" },
+    "description": { "translate": "advancements.multihooker.crates.common.description" },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "fished": { "trigger": "minecraft:impossible" }
+  }
+}

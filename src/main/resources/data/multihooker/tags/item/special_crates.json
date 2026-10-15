@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "multihooker:divine_crate",
+    "multihooker:ultra_divine_crate",
+    "multihooker:unspoken_crate",
+    "multihooker:ghost_unspoken_crate"
+  ]
+}
