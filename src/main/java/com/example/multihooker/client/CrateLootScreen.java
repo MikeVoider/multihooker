@@ -53,7 +53,7 @@ public class CrateLootScreen extends Screen {
    private List<CrateLootData.Tier> tiers = List.of();
 
    public CrateLootScreen(Screen parent) {
-      super(Component.literal("Crate Loot"));
+      super(Component.literal("Trove Loot"));
       this.parent = parent;
    }
 
@@ -109,7 +109,7 @@ public class CrateLootScreen extends Screen {
       graphics.drawCenteredString(this.font, this.title, this.width / 2, top + 8, -10929);
       graphics.drawString(this.font, Component.literal("Odds are per roll"), left + LEFT_X, top + 20, -8355712, false);
       if (this.tiers.isEmpty()) {
-         graphics.drawCenteredString(this.font, Component.literal("Crate data unavailable"), this.width / 2, top + 60, -65536);
+         graphics.drawCenteredString(this.font, Component.literal("Trove data unavailable"), this.width / 2, top + 60, -65536);
          return;
       }
 
@@ -147,12 +147,17 @@ public class CrateLootScreen extends Screen {
       int bonusWeight = tier.bonusTotalWeight();
       // The bonus section only exists when the crate has cross-mod tags to show.
       int bonusRows = tier.bonusEntries.isEmpty() ? 0 : tier.bonusEntries.size() + 1;
+      // The book stack is its own pool with its own chance, so it gets its own
+      // titled section too - never folded into the main odds.
+      int bookRows = tier.bookEntries.isEmpty() ? 0 : tier.bookEntries.size() + 1;
+      // Relics are a fourth pool: 0.2% on the Curios slot tags.
+      int relicRows = tier.relicEntries.isEmpty() ? 0 : tier.relicEntries.size() + 1;
 
       // One 18px slot per row, packed from the top. Everything that can be shown
-      // counts as a row, including the bonus section's little title, so a crate
+      // counts as a row, including each section's little title, so a crate
       // with more loot than the panel is tall simply scrolls.
       int room = (PANEL_HEIGHT - 4 - ENTRY_TOP) / ENTRY_H;
-      int rows = tier.entries.size() + bonusRows;
+      int rows = tier.entries.size() + bonusRows + bookRows + relicRows;
       int maxScroll = Math.max(0, rows - room);
       this.scroll = Math.max(0, Math.min(maxScroll, this.scroll));
 
@@ -172,12 +177,33 @@ public class CrateLootScreen extends Screen {
 
          if (row < tier.entries.size()) {
             this.drawEntry(graphics, rx, y, tier.entries.get(row), totalWeight);
-         } else if (row == tier.entries.size()) {
-            // The cross-mod bonus roll: its own pool, so its own odds.
-            graphics.fill(rx, y - 2, rx + RIGHT_W, y - 1, -11184811);
-            graphics.drawString(this.font, Component.literal("Bonus roll: one item from another installed mod"), rx, y + 5, -22016, false);
+         } else if (row < tier.entries.size() + bonusRows) {
+            int i = row - tier.entries.size();
+            if (i == 0) {
+               // The cross-mod bonus roll: its own pool, so its own odds.
+               graphics.fill(rx, y - 2, rx + RIGHT_W, y - 1, -11184811);
+               graphics.drawString(this.font, Component.literal("Bonus roll: one item from another installed mod"), rx, y + 5, -22016, false);
+            } else {
+               this.drawEntry(graphics, rx, y, tier.bonusEntries.get(i - 1), bonusWeight);
+            }
+         } else if (row < tier.entries.size() + bonusRows + bookRows) {
+            int i = row - tier.entries.size() - bonusRows;
+            if (i == 0) {
+               // The book stack: rare, but several at once.
+               graphics.fill(rx, y - 2, rx + RIGHT_W, y - 1, -11184811);
+               graphics.drawString(this.font, Component.literal("Mystery Books: rare, and a whole stack at once"), rx, y + 5, -22016, false);
+            } else {
+               this.drawEntry(graphics, rx, y, tier.bookEntries.get(i - 1), 0);
+            }
          } else {
-            this.drawEntry(graphics, rx, y, tier.bonusEntries.get(row - tier.entries.size() - 1), bonusWeight);
+            int i = row - tier.entries.size() - bonusRows - bookRows;
+            if (i == 0) {
+               // Relics: one Curios relic, and only very rarely.
+               graphics.fill(rx, y - 2, rx + RIGHT_W, y - 1, -11184811);
+               graphics.drawString(this.font, Component.literal("Relics: one Curios relic, once in ~250 troves"), rx, y + 5, -22016, false);
+            } else {
+               this.drawEntry(graphics, rx, y, tier.relicEntries.get(i - 1), 0);
+            }
          }
       }
 
@@ -222,7 +248,10 @@ public class CrateLootScreen extends Screen {
       }
 
       int room = (PANEL_HEIGHT - 4 - ENTRY_TOP) / ENTRY_H;
-      int rows = tier.entries.size() + (tier.bonusEntries.isEmpty() ? 0 : tier.bonusEntries.size() + 1);
+      int rows = tier.entries.size()
+         + (tier.bonusEntries.isEmpty() ? 0 : tier.bonusEntries.size() + 1)
+         + (tier.bookEntries.isEmpty() ? 0 : tier.bookEntries.size() + 1)
+         + (tier.relicEntries.isEmpty() ? 0 : tier.relicEntries.size() + 1);
       int maxScroll = Math.max(0, rows - room);
       if (maxScroll <= 0) {
          return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);

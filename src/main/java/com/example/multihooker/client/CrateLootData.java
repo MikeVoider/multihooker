@@ -18,6 +18,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
+import com.example.multihooker.treasure.CrateBonusLoot;
+import net.neoforged.neoforge.common.ModConfigSpec.DoubleValue;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
@@ -129,6 +131,49 @@ public final class CrateLootData {
             }
          }
 
+         // The book stack is a THIRD pool: it has its own low trigger chance and
+         // rolls several books at once, so neither its odds nor its amounts can
+         // be folded in with the main pool's - it is listed on its own.
+         if (obj.has("book_entries")) {
+            for (JsonElement entryElement : obj.getAsJsonArray("book_entries")) {
+               JsonObject entry = entryElement.getAsJsonObject();
+               int min = entry.has("min") ? entry.get("min").getAsInt() : 1;
+               int max = entry.has("max") ? entry.get("max").getAsInt() : 1;
+               // books are rolled in code from the config, so the screen reads the
+               // LIVE number rather than whatever was generated
+               DoubleValue cfg = CrateBonusLoot.bookChance(tier.key);
+               double chance = cfg == null ? 0.0 : (Double)cfg.get();
+               tier.bookEntries.add(new Entry(
+                  entry.get("kind").getAsString(),
+                  entry.get("id").getAsString(),
+                  entry.get("weight").getAsInt(),
+                  min,
+                  max,
+                  null,
+                  chance
+               ));
+            }
+         }
+
+         // The relic pool is a fourth pool: a brutal 0.2% trigger on the Curios
+         // slot tags, so it is listed on its own rather than as ordinary loot.
+         if (obj.has("relic_entries")) {
+            for (JsonElement entryElement : obj.getAsJsonArray("relic_entries")) {
+               JsonObject entry = entryElement.getAsJsonObject();
+               // likewise read live from the config
+               double chance = (Double)Config.RELIC_CHANCE.get();
+               tier.relicEntries.add(new Entry(
+                  entry.get("kind").getAsString(),
+                  entry.get("id").getAsString(),
+                  entry.get("weight").getAsInt(),
+                  1,
+                  1,
+                  null,
+                  chance
+               ));
+            }
+         }
+
          out.add(tier);
       }
 
@@ -177,6 +222,10 @@ public final class CrateLootData {
       public final List<Entry> entries = new ArrayList<>();
       /** The bonus roll's pool: one item from any installed mod. */
       public final List<Entry> bonusEntries = new ArrayList<>();
+      /** The separate, rarely-triggering book stack pool. */
+      public final List<Entry> bookEntries = new ArrayList<>();
+      /** The very rare Curios relic/trinket pool. */
+      public final List<Entry> relicEntries = new ArrayList<>();
       public int rollMin = 1;
       public int rollMax = 1;
 
@@ -218,6 +267,12 @@ public final class CrateLootData {
       public final int max;
       /** Optional display name (used for named compat entries); may be null. */
       public final String name;
+      /**
+       * For the book pool: the chance the pool triggers at all, so the screen can
+       * state it honestly. 0 for every ordinary entry, whose odds come from its
+       * weight in the main pool instead.
+       */
+      public final double chance;
       private List<ItemStack> tagCache;
 
       Entry(String kind, String id, int weight, int min, int max) {
@@ -225,12 +280,17 @@ public final class CrateLootData {
       }
 
       Entry(String kind, String id, int weight, int min, int max, String name) {
+         this(kind, id, weight, min, max, name, 0.0);
+      }
+
+      Entry(String kind, String id, int weight, int min, int max, String name, double chance) {
          this.kind = kind;
          this.id = id;
          this.weight = weight;
          this.min = min;
          this.max = max;
          this.name = name;
+         this.chance = chance;
       }
 
       public boolean isTag() {
@@ -303,6 +363,11 @@ public final class CrateLootData {
 
       /** The odds of this entry coming up on a single roll, as a whole percentage. */
       public int chancePercent(int totalWeight) {
+         // A conditional pool (the book stack) knows its own trigger chance;
+         // its weight only says what it hands out, not how often.
+         if (this.chance > 0.0) {
+            return (int)Math.round(this.chance * 100.0);
+         }
          return totalWeight <= 0 ? 0 : (int)Math.round(100.0 * this.weight / totalWeight);
       }
    }

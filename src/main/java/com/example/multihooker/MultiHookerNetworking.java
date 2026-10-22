@@ -1,11 +1,13 @@
 package com.example.multihooker;
 
+import com.example.multihooker.client.MultiHookerClient;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload.Type;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
@@ -25,11 +27,43 @@ public final class MultiHookerNetworking {
          MultiHookerNetworking.ResetBobbersSkillPayload.STREAM_CODEC,
          (payload, context) -> context.enqueueWork(() -> SkillData.handleResetRequest((ServerPlayer)context.player()))
       );
+      registrar.playToClient(
+         MultiHookerNetworking.ItemDroppedPayload.TYPE,
+         MultiHookerNetworking.ItemDroppedPayload.STREAM_CODEC,
+         (payload, context) -> context.enqueueWork(() ->
+            MultiHookerClient.onItemDropped(payload.stack()))
+      );
       registrar.playToServer(
          MultiHookerNetworking.LevelUpSeaMasterPayload.TYPE,
          MultiHookerNetworking.LevelUpSeaMasterPayload.STREAM_CODEC,
          (payload, context) -> context.enqueueWork(() -> RelicData.handleLevelUpRequest((ServerPlayer)context.player()))
       );
+   }
+
+   /**
+    * Tells the client that the server handed this player a MultiHooker drop directly.
+    *
+    * <p>Exists purely so pickup-notification mods can see our drops. Those work by intercepting
+    * the packet the game sends when a player walks over an item entity on the ground. MultiHooker
+    * offers {@code instantCatchPickup}, which puts the stack straight into the inventory instead,
+    * so no item entity is created, no packet is sent, and a notifier has nothing to announce. This
+    * payload carries the same information over explicitly so the client can replay it into
+    * whichever notifier is installed.
+    */
+   public record ItemDroppedPayload(ItemStack stack) implements CustomPacketPayload {
+      public static final Type<ItemDroppedPayload> TYPE = new Type(
+         ResourceLocation.fromNamespaceAndPath("multihooker", "item_dropped")
+      );
+
+      public static final StreamCodec<RegistryFriendlyByteBuf, ItemDroppedPayload> STREAM_CODEC =
+         StreamCodec.composite(
+            ItemStack.OPTIONAL_STREAM_CODEC, ItemDroppedPayload::stack,
+            ItemDroppedPayload::new
+         );
+
+      public Type<ItemDroppedPayload> type() {
+         return TYPE;
+      }
    }
 
    public record LevelUpSeaMasterPayload() implements CustomPacketPayload {

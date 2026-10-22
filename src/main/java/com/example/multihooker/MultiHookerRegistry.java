@@ -1,6 +1,9 @@
 package com.example.multihooker;
 
 import com.example.multihooker.client.TooltipClient;
+import com.example.multihooker.treasure.CratePotionItem;
+import com.example.multihooker.treasure.ElixirItem;
+import com.example.multihooker.treasure.MysteryBookItem;
 import com.mojang.serialization.Codec;
 import java.util.List;
 import net.minecraft.ChatFormatting;
@@ -11,7 +14,8 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.EntityType.Builder;
@@ -47,6 +51,12 @@ public final class MultiHookerRegistry {
    public static final DeferredRegister<AttachmentType<?>> ATTACHMENTS = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, "multihooker");
    public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, "multihooker");
    public static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(Registries.MENU, "multihooker");
+   /**
+    * Status effects added by MultiHooker. Crate Luck is the buff granted by the
+    * Crate Potion.
+    */
+   public static final DeferredRegister<MobEffect> EFFECTS = DeferredRegister.create(Registries.MOB_EFFECT, "multihooker");
+   public static final DeferredHolder<MobEffect, MobEffect> CRATE_LUCK = EFFECTS.register("crate_luck", CrateLuckEffect::new);
    /** The hinge carried by every empty crate; see {@link CrateBlockEntity}. */
    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(
       Registries.BLOCK_ENTITY_TYPE, "multihooker"
@@ -215,6 +225,7 @@ public final class MultiHookerRegistry {
          }
       };
    }
+
    public static final DeferredHolder<Item, Item> SEA_MASTER = ITEMS.register(
       "sea_master", () -> new Item(new Properties().rarity(Rarity.EPIC).stacksTo(1)) {
       public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
@@ -236,6 +247,36 @@ public final class MultiHookerRegistry {
          }
       }
    });
+
+   // Treasure items (elixirs, Crate Potion and the Mystery Enchantment Books).
+   // Absorbed from the standalone "MultiHooker Treasures" add-on, so the ids and
+   // behaviour now live here. All three drinks are fishing-only, so all three carry the
+    // "cannot be crafted" tooltip.
+   public static final DeferredHolder<Item, ElixirItem> ELIXIR_VITALITY = ITEMS.register(
+      "elixir_vitality", () -> ElixirItem.create("elixir_vitality", true)
+   );
+   public static final DeferredHolder<Item, ElixirItem> ELIXIR_FORTUNE = ITEMS.register(
+      "elixir_fortune", () -> ElixirItem.create("elixir_fortune", true)
+   );
+   public static final DeferredHolder<Item, CratePotionItem> CRATE_POTION = ITEMS.register(
+      "crate_potion", CratePotionItem::new
+   );
+   public static final DeferredHolder<Item, MysteryBookItem> MYSTERY_BOOK_COMMON = ITEMS.register(
+      "mystery_book_common", () -> new MysteryBookItem(MysteryBookItem.Tier.COMMON)
+   );
+   public static final DeferredHolder<Item, MysteryBookItem> MYSTERY_BOOK_RARE = ITEMS.register(
+      "mystery_book_rare", () -> new MysteryBookItem(MysteryBookItem.Tier.RARE)
+   );
+   public static final DeferredHolder<Item, MysteryBookItem> MYSTERY_BOOK_EPIC = ITEMS.register(
+      "mystery_book_epic", () -> new MysteryBookItem(MysteryBookItem.Tier.EPIC)
+   );
+   public static final DeferredHolder<Item, MysteryBookItem> MYSTERY_BOOK_LEGENDARY = ITEMS.register(
+      "mystery_book_legendary", () -> new MysteryBookItem(MysteryBookItem.Tier.LEGENDARY)
+   );
+   public static final DeferredHolder<Item, MysteryBookItem> MYSTERY_BOOK_MYTHICAL = ITEMS.register(
+      "mystery_book_mythical", () -> new MysteryBookItem(MysteryBookItem.Tier.MYTHICAL)
+   );
+
    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> MULTIHOOKER_TAB = CREATIVE_MODE_TABS.register(
       "main",
       () -> CreativeModeTab.builder()
@@ -256,6 +297,14 @@ public final class MultiHookerRegistry {
             output.accept((ItemLike)ULTRA_DIVINE_CRATE_ITEM.get());
             output.accept((ItemLike)UNSPOKEN_CRATE_ITEM.get());
             output.accept((ItemLike)GHOST_UNSPOKEN_CRATE_ITEM.get());
+            output.accept((ItemLike)ELIXIR_VITALITY.get());
+            output.accept((ItemLike)ELIXIR_FORTUNE.get());
+            output.accept((ItemLike)CRATE_POTION.get());
+            output.accept((ItemLike)MYSTERY_BOOK_COMMON.get());
+            output.accept((ItemLike)MYSTERY_BOOK_RARE.get());
+            output.accept((ItemLike)MYSTERY_BOOK_EPIC.get());
+            output.accept((ItemLike)MYSTERY_BOOK_LEGENDARY.get());
+            output.accept((ItemLike)MYSTERY_BOOK_MYTHICAL.get());
          })
          .build()
    );
@@ -277,6 +326,13 @@ public final class MultiHookerRegistry {
       "sea_master_level",
       () -> AttachmentType.builder(() -> 0).serialize(Codec.INT).copyOnDeath().sync((holder, player) -> holder == player, ByteBufCodecs.VAR_INT).build()
    );
+
+   /** Beneficial, colour is the crate brown used by the treasures content. */
+   private static final class CrateLuckEffect extends MobEffect {
+      private CrateLuckEffect() {
+         super(MobEffectCategory.BENEFICIAL, 0x663300);
+      }
+   }
 
    private MultiHookerRegistry() {
    }

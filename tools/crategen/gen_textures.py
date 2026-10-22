@@ -425,12 +425,10 @@ def engrave_name(img, tier, wood):
     """Engrave the tier name into the wood; returns a list of keepout boxes,
     one per line, so sea growth can still fill the gaps beside short lines."""
     l, m, d, seam = wood
-    if lum(m) > 110:
-        groove = mix(m, (34, 26, 18), 0.72)
-        lip = mix(m, (255, 250, 240), 0.35)
-    else:
-        groove = mix(m, (235, 238, 245), 0.70)
-        lip = mix(m, (10, 8, 14), 0.55)
+    # Grey-white engraved text: slightly darker than pure white for better
+    # readability against any wood tone, with subtle groove/lip contrast.
+    groove = (200, 200, 200)   # grey carved groove
+    lip = (230, 230, 230)      # lighter grey raised lip
     words = tier["words"]
     if len(words) == 1:
         return [carve_text(img, words[0], 32, 32, groove, lip)]
@@ -498,8 +496,13 @@ def crate_face(tier, seed, which):
         for rx, ry in ((10, 6), (22, 6), (42, 6), (54, 6), (10, 57), (22, 57), (42, 57), (54, 57), (2, 17), (61, 17), (2, 46), (61, 46)):
             rivet(img, rx, ry, trim, 2)
         # no lock/keyhole/handle: the crate is locked and opened with the
-        # AquaKey, so the front just carries the engraved name like the sides.
-        keepout = engrave_name(img, tier, wood)
+        # AquaKey. The LEFT and RIGHT faces carry the engraved tier name, so
+        # the name is readable while the trove is held in hand. The front and
+        # back faces stay clean.
+        if which == "side":
+            keepout = engrave_name(img, tier, wood)
+        else:
+            keepout = []
 
     scatter_encrust(img, rnd, keepout, count=13)
     return img
@@ -516,6 +519,78 @@ def generate(tier_key):
         path = os.path.join(OUT, f"{tier_key}_crate_{name}.png")
         img.save(path)
         print("wrote", path)
+
+
+# ------------------------------------------------------------------ shading ---
+#
+# Vanilla lights a block's faces by direction (ClientLevel.getShade): north and
+# south 0.8, east and west 0.6, up 1.0, down 0.5 - and the direction it uses is
+# the one the quad ends up facing in the WORLD, because FaceBakery derives it
+# from the vertices after the blockstate rotation has been applied. A crate
+# turned to face the player therefore swaps its 0.8 and 0.6 faces around
+# depending on how it was placed, so no single texture can make its four sides
+# agree: brightening the named texture fixes the turned lid and breaks the
+# chunk-baked body, which shades the other way round.
+#
+# The crate models switch the whole thing off instead. Both elements carry
+# "shade": false, and BakedQuad.isShade() then makes getShade() return 1.0 for
+# every quad of the box, in the chunk path and in the lid renderer alike. All
+# four vertical faces land on exactly the same brightness wherever the crate is
+# turned, and the lid's rim lands on the same tone as the panel under it.
+#
+# What is left is to keep the crate sitting at a normal block's brightness
+# rather than glowing. The two outside textures are multiplied by 0.8, so
+#
+#     1.0 * (0.8 * texture)  ==  0.8 * texture
+#
+# which is exactly what a vanilla block's north and south faces show. The top
+# keeps its straight texture at 1.0, so the lid still reads as lit from above
+# and the crate keeps its form.
+#
+# This runs on the finished textures, after the inside texture has been derived
+# from the pristine wood, so the hollow interior keeps its own tone instead of
+# darkening along with the outside of the crate.
+VERTICAL_SHADE = 0.8
+OUTSIDE_SLOTS = ("side", "front")
+
+
+def bake_vertical_shade(key):
+    """Multiply the two outside textures by the shade the models no longer apply.
+
+    Both are scaled by the same factor, so the named and clean faces stay in the
+    same relationship they were painted in and no zone needs its own gain. A
+    plain multiply is enough: the factor is below 1, so nothing can clip and the
+    engraving's groove and lip keep their separation.
+    """
+    report = []
+    for slot in OUTSIDE_SLOTS:
+        path = os.path.join(OUT, f"{key}_crate_{slot}.png")
+        with Image.open(path) as image:
+            img = image.convert("RGBA")
+        px = img.load()
+        width, height = img.size
+        before = 0.0
+        after = 0.0
+        count = 0
+        for y in range(height):
+            for x in range(width):
+                red, green, blue, alpha = px[x, y]
+                if alpha == 0:
+                    continue
+                before += _luma(red, green, blue)
+                red = int(round(red * VERTICAL_SHADE))
+                green = int(round(green * VERTICAL_SHADE))
+                blue = int(round(blue * VERTICAL_SHADE))
+                px[x, y] = (red, green, blue, alpha)
+                after += _luma(red, green, blue)
+                count += 1
+        img.save(path)
+        report.append("%s %5.1f -> %5.1f" % (slot, before / count, after / count))
+    print("shade %-14s %s" % (key, " | ".join(report)))
+
+
+def _luma(red, green, blue):
+    return 0.30 * red + 0.59 * green + 0.11 * blue
 
 
 def main():

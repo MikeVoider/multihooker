@@ -7,6 +7,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -14,7 +15,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FishingHook;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ItemLike;
@@ -25,6 +25,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.LootParams.Builder;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.event.entity.player.ItemFishedEvent;
@@ -69,20 +70,25 @@ public final class KeyLootHandler {
          }
          dropCustomItem(player, hook, new ItemStack((ItemLike)MultiHookerRegistry.SEA_MASTER.get()), (Double)Config.SEA_MASTER_DROP_CHANCE.get(), "SeaMaster");
 
+      // The three drinks are deliberately NOT fished up any more. They used to be, and the
+      // Crate Potion in particular was awkward here: its Crate Luck rides on the Luck attribute,
+      // which fishing also reads, so a potion that makes fishing better really wants to come from
+      // a crate rather than off the rod. All three are trove loot now - see CrateBonusLoot.
+
          // Every crate that really drops also unlocks its own advancement. The tier
          // keys line up with data/multihooker/advancement/crates/<tier>.json.
-         dropCrate(player, hook, MultiHookerRegistry.COMMON_CRATE_ITEM.get(), (Double)Config.COMMON_CRATE_CHANCE.get(), "Common Crate", "common");
-         dropCrate(player, hook, MultiHookerRegistry.UNCOMMON_CRATE_ITEM.get(), (Double)Config.UNCOMMON_CRATE_CHANCE.get(), "Uncommon Crate", "uncommon");
-         dropCrate(player, hook, MultiHookerRegistry.RARE_CRATE_ITEM.get(), (Double)Config.RARE_CRATE_CHANCE.get(), "Rare Crate", "rare");
-         dropCrate(player, hook, MultiHookerRegistry.EPIC_CRATE_ITEM.get(), (Double)Config.EPIC_CRATE_CHANCE.get(), "Epic Crate", "epic");
-         dropCrate(player, hook, MultiHookerRegistry.LEGENDARY_CRATE_ITEM.get(), (Double)Config.LEGENDARY_CRATE_CHANCE.get(), "Legendary Crate", "legendary");
-         dropCrate(player, hook, MultiHookerRegistry.GODLY_CRATE_ITEM.get(), (Double)Config.GODLY_CRATE_CHANCE.get(), "Godly Crate", "godly");
-         dropCrate(player, hook, MultiHookerRegistry.MYTHIC_CRATE_ITEM.get(), (Double)Config.MYTHIC_CRATE_CHANCE.get(), "Mythic Crate", "mythic");
-         dropCrate(player, hook, MultiHookerRegistry.SECRET_CRATE_ITEM.get(), (Double)Config.SECRET_CRATE_CHANCE.get(), "Secret Crate", "secret");
-         dropCrate(player, hook, MultiHookerRegistry.DIVINE_CRATE_ITEM.get(), (Double)Config.DIVINE_CRATE_CHANCE.get(), "Divine Crate", "divine");
-         dropCrate(player, hook, MultiHookerRegistry.ULTRA_DIVINE_CRATE_ITEM.get(), (Double)Config.ULTRA_DIVINE_CRATE_CHANCE.get(), "Ultra Divine Crate", "ultra_divine");
-         dropCrate(player, hook, MultiHookerRegistry.UNSPOKEN_CRATE_ITEM.get(), (Double)Config.UNSPOKEN_CRATE_CHANCE.get(), "Unspoken Crate", "unspoken");
-         dropCrate(player, hook, MultiHookerRegistry.GHOST_UNSPOKEN_CRATE_ITEM.get(), (Double)Config.GHOST_UNSPOKEN_CRATE_CHANCE.get(), "GhostUnspoken Crate", "ghost_unspoken");
+         dropCrate(player, hook, MultiHookerRegistry.COMMON_CRATE_ITEM.get(), (Double)Config.COMMON_CRATE_CHANCE.get(), "Common Trove", "common");
+         dropCrate(player, hook, MultiHookerRegistry.UNCOMMON_CRATE_ITEM.get(), (Double)Config.UNCOMMON_CRATE_CHANCE.get(), "Uncommon Trove", "uncommon");
+         dropCrate(player, hook, MultiHookerRegistry.RARE_CRATE_ITEM.get(), (Double)Config.RARE_CRATE_CHANCE.get(), "Rare Trove", "rare");
+         dropCrate(player, hook, MultiHookerRegistry.EPIC_CRATE_ITEM.get(), (Double)Config.EPIC_CRATE_CHANCE.get(), "Epic Trove", "epic");
+         dropCrate(player, hook, MultiHookerRegistry.LEGENDARY_CRATE_ITEM.get(), (Double)Config.LEGENDARY_CRATE_CHANCE.get(), "Legendary Trove", "legendary");
+         dropCrate(player, hook, MultiHookerRegistry.GODLY_CRATE_ITEM.get(), (Double)Config.GODLY_CRATE_CHANCE.get(), "Godly Trove", "godly");
+         dropCrate(player, hook, MultiHookerRegistry.MYTHIC_CRATE_ITEM.get(), (Double)Config.MYTHIC_CRATE_CHANCE.get(), "Mythic Trove", "mythic");
+         dropCrate(player, hook, MultiHookerRegistry.SECRET_CRATE_ITEM.get(), (Double)Config.SECRET_CRATE_CHANCE.get(), "Secret Trove", "secret");
+         dropCrate(player, hook, MultiHookerRegistry.DIVINE_CRATE_ITEM.get(), (Double)Config.DIVINE_CRATE_CHANCE.get(), "Divine Trove", "divine");
+         dropCrate(player, hook, MultiHookerRegistry.ULTRA_DIVINE_CRATE_ITEM.get(), (Double)Config.ULTRA_DIVINE_CRATE_CHANCE.get(), "Ultra Divine Trove", "ultra_divine");
+         dropCrate(player, hook, MultiHookerRegistry.UNSPOKEN_CRATE_ITEM.get(), (Double)Config.UNSPOKEN_CRATE_CHANCE.get(), "Unspoken Trove", "unspoken");
+         dropCrate(player, hook, MultiHookerRegistry.GHOST_UNSPOKEN_CRATE_ITEM.get(), (Double)Config.GHOST_UNSPOKEN_CRATE_CHANCE.get(), "GhostUnspoken Trove", "ghost_unspoken");
          tryNetThrow(player, hook);
       } catch (Throwable var6) {
          MultiHookerMod.LOGGER.error("MultiHooker: catch handler failed", var6);
@@ -90,27 +96,16 @@ public final class KeyLootHandler {
    }
 
    public static boolean hasSeaMaster(Player player) {
-      Item seaMaster = ((Item)MultiHookerRegistry.SEA_MASTER.get()).asItem();
+      // The Net ability only works when the SeaMaster Relic is actually worn
+      // in the Curios necklace slot. Without Curios there is no necklace slot,
+      // so the ability never fires from the inventory.
       if (!ModList.get().isLoaded("curios")) {
-         for (ItemStack stack : player.getInventory().items) {
-            if (!stack.isEmpty() && stack.is(seaMaster)) {
-               return true;
-            }
-         }
-
-         for (ItemStack stackx : player.getInventory().offhand) {
-            if (!stackx.isEmpty() && stackx.is(seaMaster)) {
-               return true;
-            }
-         }
-
          return false;
-      } else {
-         return CuriosBridge.isEquipped(player);
       }
+      return CuriosBridge.isEquipped(player);
    }
 
-   private static boolean dropCustomItem(Player player, FishingHook hook, ItemStack stack, double chance, String debugName) {
+   static boolean dropCustomItem(Player player, FishingHook hook, ItemStack stack, double chance, String debugName) {
       if (chance <= 0.0 || player.getRandom().nextDouble() >= chance) {
          return false;
       }
@@ -123,7 +118,15 @@ public final class KeyLootHandler {
       // Straight into the inventory when enabled; Inventory.add() shrinks the stack to
       // whatever did not fit, so anything left over is still tossed to the player.
       if ((Boolean)Config.INSTANT_CATCH_PICKUP.get()) {
+         // Inventory.add() shrinks the stack down to whatever did NOT fit, so the count is kept
+         // here first - after the call, `stack` holds only the leftover.
+         ItemStack offered = stack.copy();
          player.getInventory().add(stack);
+         int delivered = offered.getCount() - stack.getCount();
+         if (delivered > 0) {
+            offered.setCount(delivered);
+            announceDirectPickup(player, offered);
+         }
          if (stack.isEmpty()) {
             if ((Boolean)Config.DEBUG_LOG.get()) {
                MultiHookerMod.LOGGER.info("[MultiHooker] {} -> {}'s inventory", debugName, player.getName());
@@ -146,12 +149,52 @@ public final class KeyLootHandler {
       return true;
    }
 
-   /** Drops a crate and - only when it really landed - unlocks that crate's advancement. */
-   private static void dropCrate(Player player, FishingHook hook, ItemLike item, double chance, String debugName, String tier) {
-      if (dropCustomItem(player, hook, new ItemStack(item), chance, debugName)) {
-         awardCrateAdvancement(player, tier);
+   /**
+    * Tells the client a stack went straight into the player's inventory.
+    *
+    * <p>Only needed for the instant pickup path. Items thrown on the ground are picked up the
+    * normal way and already produce the pickup packet that notifier mods listen for.
+    */
+   private static void announceDirectPickup(Player player, ItemStack stack) {
+      if (player instanceof ServerPlayer serverPlayer) {
+         PacketDistributor.sendToPlayer(serverPlayer, new MultiHookerNetworking.ItemDroppedPayload(stack));
       }
    }
+
+   /** Drops a crate and - only when it really landed - unlocks that crate's advancement. */
+   private static void dropCrate(Player player, FishingHook hook, ItemLike item, double chance, String debugName, String tier) {
+      if (!dropCustomItem(player, hook, new ItemStack(item), chance, debugName)) {
+         return;
+      }
+      announceCrateCatch(player, debugName);
+      awardCrateAdvancement(player, tier);
+   }
+
+   /**
+    * Tells the player a trove came up.
+    *
+    * <p>A crate appearing in the inventory is easy to miss: it lands while the fishing animation
+    * is still playing and the cast bar is already gone by the time the item is there. The
+    * advancement does not help either, because the toast only fires the first time each tier is
+    * ever caught. So every catch says so on the action bar, and the four special tiers get a
+    * louder line so they stand out from the ordinary ladder.
+    */
+   private static void announceCrateCatch(Player player, String debugName) {
+      if (!(player instanceof ServerPlayer serverPlayer)) {
+         return;
+      }
+      serverPlayer.displayClientMessage(
+         Component.translatable(
+            SPECIAL_CRATES_DISPLAY.contains(debugName)
+               ? "message.multihooker.crate_caught_special"
+               : "message.multihooker.crate_caught",
+            debugName),
+         true);
+   }
+
+   /** The four special troves, by the display name used in {@link #dropCrate}. */
+   private static final java.util.List<String> SPECIAL_CRATES_DISPLAY =
+      java.util.List.of("Divine Trove", "Ultra Divine Trove", "Unspoken Trove", "GhostUnspoken Trove");
 
    /**
     * Completes "multihooker:crates/&lt;tier&gt;" for a player who has just fished that crate

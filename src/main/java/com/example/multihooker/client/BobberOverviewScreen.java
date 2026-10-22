@@ -41,9 +41,9 @@ public class BobberOverviewScreen extends Screen {
       );
       int rowY = top + PANEL_HEIGHT - 22;
       this.addRenderableWidget(
-         Button.builder(Component.literal("Crate Loot"), button -> this.openCrateLoot())
+         Button.builder(Component.literal("Trove Loot"), button -> this.openCrateLoot())
             .bounds(left + (PANEL_WIDTH - 120) / 2, top + 136, 120, 18)
-            .tooltip(Tooltip.create(Component.literal("Browse what every crate can drop.")))
+            .tooltip(Tooltip.create(Component.literal("Browse what every trove can drop.")))
             .build()
       );
       this.resetButton = (Button)this.addRenderableWidget(

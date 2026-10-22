@@ -153,6 +153,46 @@ tasks.withType(ProcessResources).configureEach {
     filesMatching(['META-INF/neoforge.mods.toml']) {
         expand replaceProperties
     }
+
+    // Strip the pretty-printing out of every JSON that ships.
+    //
+    // Roughly a third of the jar is JSON, and all of it is indented for humans to read -
+    // which is the right call for the source tree and entirely wasted space in the shipped
+    // copy. Indentation and newlines are about a quarter of the total weight here, so this
+    // runs after everything else has been copied in and rewrites the files in place. The
+    // sources under src/main/resources are never touched, so they stay readable and
+    // regenerating them from tools/crategen keeps working as before.
+    //
+    // Every file is parsed and re-emitted rather than having whitespace stripped blindly,
+    // because a loot table that fails to parse is a crate that silently gives nothing -
+    // and a file that cannot be parsed is left exactly as it was, with the failure printed,
+    // rather than being mangled.
+    doLast {
+        var minified = 0
+        var saved = 0L
+        destinationDir.eachFileRecurse { file ->
+            if (!file.isFile() || !file.name.endsWith('.json')) {
+                return
+            }
+            def original = file.getText('UTF-8')
+            def rewritten
+            try {
+                rewritten = groovy.json.JsonOutput.toJson(
+                        new groovy.json.JsonSlurper().parseText(original))
+            } catch (Exception parseFailure) {
+                logger.warn("[minify] leaving {} untouched: {}", file.name, parseFailure.message)
+                return
+            }
+            def before = original.length()
+            def after = rewritten.length()
+            if (after < before) {
+                file.setText(rewritten, 'UTF-8')
+                minified++
+                saved += before - after
+            }
+        }
+        logger.lifecycle("[minify] compacted {} JSON files, saved {} bytes", minified, saved)
+    }
 }
 
 // Example configuration to allow publishing using the maven-publish plugin

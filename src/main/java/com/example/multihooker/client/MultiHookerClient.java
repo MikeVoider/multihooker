@@ -1,6 +1,5 @@
 package com.example.multihooker.client;
 
-import com.example.multihooker.CrateMenu;
 import com.example.multihooker.EmptyCrateBlock;
 import com.example.multihooker.MultiHookerMod;
 import com.example.multihooker.MultiHookerRegistry;
@@ -28,6 +27,9 @@ import net.neoforged.neoforge.common.NeoForge;
 import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
 
 public final class MultiHookerClient {
+   /** Shared with the elixir geometry, which has no mod instance of its own. */
+   public static final org.slf4j.Logger LOG = MultiHookerMod.LOGGER;
+
    private static final KeyMapping OPEN_PANEL = new KeyMapping("key.multihooker.open_panel", Type.KEYSYM, 80, "key.categories.multihooker");
 
    private MultiHookerClient() {
@@ -97,6 +99,18 @@ public final class MultiHookerClient {
    }
 
    /** The chest-style loot window opened by right-clicking a placed crate. */
+   /**
+    * A MultiHooker drop the server put straight into the player's inventory.
+    *
+    * <p>Replayed into whichever pickup notifier is installed, because instant catch pickup skips
+    * the ground-item pickup those notifiers listen for. See {@link PickupNotifierBridge}.
+    */
+   public static void onItemDropped(net.minecraft.world.item.ItemStack stack) {
+      if (Minecraft.getInstance().player != null) {
+         PickupNotifierBridge.announce(Minecraft.getInstance().player, stack);
+      }
+   }
+
    private static void onRegisterMenuScreens(RegisterMenuScreensEvent event) {
       event.register(MultiHookerRegistry.CRATE_MENU.get(), CrateScreen::new);
    }

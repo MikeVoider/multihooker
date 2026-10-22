@@ -37,16 +37,17 @@ BOXES = [
 # the texture's pixel size). Do NOT use the texture pixel size here.
 TEX = 16
 # which texture each face gets: faces are +x/-x/+y/-y/+z/-z in mc space.
-# The body's SOUTH face is the crate front (facing=south is unrotated in the
-# blockstate), so it carries the lock texture.
+# Front and back are the clean faces; the engraved name lives on east/west.
+# This mapping must match FACE_TEX in gen_resources.py, which writes the models
+# the game actually loads.
 FACE_TEX = {
-    "body": {"up": "side", "down": "side", "north": "side", "south": "front", "east": "side", "west": "side"},
-    "lid": {"up": "top", "down": "side", "north": "side", "south": "side", "east": "side", "west": "side"},
+    "body": {"up": "side", "down": "side", "north": "front", "south": "front", "east": "side", "west": "side"},
+    "lid": {"up": "top", "down": "side", "north": "front", "south": "front", "east": "side", "west": "side"},
 }
-# The lid's four sides are only 3/16 of a block tall, so mapping the whole side
+# The lid's four sides are only 3/16 of a block tall, so mapping the whole
 # texture onto them would squash it into a smear. Sample just the top 3/16 strip
-# instead - that strip is the side texture's metal band, so the lid ends up with
-# a clean banded rim.
+# of the same texture the face below uses instead - that strip is the metal band,
+# so the lid ends up with a clean banded rim that lines up with the body.
 UV_OVERRIDE = {
     ("lid", "north"): [0, 0, TEX, 3],
     ("lid", "south"): [0, 0, TEX, 3],

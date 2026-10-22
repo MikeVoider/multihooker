@@ -1,19 +1,19 @@
 {
   "variants": {
     "facing=south": {
-      "model": "multihooker:block/rare_crate"
-    },
-    "facing=west": {
       "model": "multihooker:block/rare_crate",
       "y": 90
     },
-    "facing=north": {
+    "facing=west": {
       "model": "multihooker:block/rare_crate",
       "y": 180
     },
-    "facing=east": {
+    "facing=north": {
       "model": "multihooker:block/rare_crate",
       "y": 270
+    },
+    "facing=east": {
+      "model": "multihooker:block/rare_crate"
     }
   }
 }

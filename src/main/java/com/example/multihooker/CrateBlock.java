@@ -1,6 +1,7 @@
 package com.example.multihooker;
 
 import java.util.function.Supplier;
+import com.example.multihooker.treasure.CrateBonusLoot;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -86,6 +87,20 @@ public class CrateBlock extends AbstractCrateBlock {
       return InteractionResult.sidedSuccess(level.isClientSide());
    }
 
+   /**
+    * The luck a crate's loot is rolled with.
+    *
+    * <p>Just the player's own luck now. Crate Luck used to be added here by hand, but that only
+    * ever helped MultiHooker's own crates. It now rides on the Luck attribute instead (see
+    * {@link com.example.multihooker.treasure.CrateLuckBonus}), so MultiHooker's troves and every
+    * other crate in the pack all read the same boosted number.
+    *
+    * @return the luck to roll with, never below 0
+    */
+   private static float crateLuck(Player player) {
+      return Math.max(0.0F, player.getLuck());
+   }
+
    private void open(Level level, BlockPos pos, BlockState state, Player player, ItemStack keyStack) {
       if (!(level instanceof ServerLevel server) || !(player instanceof ServerPlayer serverPlayer)) {
          return;
@@ -95,16 +110,17 @@ public class CrateBlock extends AbstractCrateBlock {
       ResourceKey<LootTable> key = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("multihooker", "crates/" + tier));
       LootParams params = new LootParams.Builder(server)
          .withParameter(LootContextParams.ORIGIN, pos.getCenter())
-         .withLuck(player.getLuck())
+         .withLuck(crateLuck(player))
          .create(LootContextParamSets.CHEST);
       LootTable table = server.getServer().reloadableRegistries().getLootTable(key);
 
-      // Roll the loot into the window's chest grid (27 slots). A crate rolls at
-      // most 9 stacks, so this only overflows if a pack makes a crate enormous;
-      // the overflow goes straight to the player rather than being dropped on the
-      // floor.
+      // Roll the loot into the window's chest grid (27 slots). SimpleContainer#addItem
+      // stacks each roll into a matching stack that is already there before it takes
+      // a fresh slot, so two rolls of the same item end up as one bigger stack (3
+      // diamonds + 2 diamonds = 5 in a single slot) instead of two half-empty slots.
+      // Only what genuinely does not fit moves on to the player, and only then to
+      // the floor.
       SimpleContainer loot = new SimpleContainer(CrateMenu.LOOT_SLOTS);
-      int slot = 0;
 
       for (ItemStack stack : table.getRandomItems(params)) {
          // Instruction books (a guidebook/manual that another mod tagged into one
@@ -114,12 +130,21 @@ public class CrateBlock extends AbstractCrateBlock {
             continue;
          }
 
-         if (slot < loot.getContainerSize()) {
-            loot.setItem(slot++, stack);
-         } else if (!player.getInventory().add(stack)) {
-            player.drop(stack, false);
+         ItemStack leftover = loot.addItem(stack);
+         if (!leftover.isEmpty() && !player.getInventory().add(leftover)) {
+            player.drop(leftover, false);
          }
       }
+
+      // Books and relics are rolled here, not in the loot table, because their
+      // rates are config options. They go into the same container, so they merge
+      // with matching stacks exactly like the ordinary loot does.
+      CrateBonusLoot.rollInto(tier, player.getRandom(), stack -> {
+         ItemStack leftover = loot.addItem(stack);
+         if (!leftover.isEmpty() && !player.getInventory().add(leftover)) {
+            player.drop(leftover, false);
+         }
+      });
 
       // The crate springs open: it stays behind as its empty form, keeping its
       // facing, and can never be opened again.

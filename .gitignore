@@ -28,3 +28,9 @@ __pycache__
 *.pyc
 
 repo
+
+# generated preview sheets - regenerated from the models, not source
+tools/*/preview/
+
+# agent working notes, rewritten every session
+NEXT_SESSION.md

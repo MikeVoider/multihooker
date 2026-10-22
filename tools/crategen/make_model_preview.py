@@ -17,6 +17,8 @@ Writes: preview/empty_crates.png, preview/open_vs_closed.png
 import json
 import math
 import os
+import shutil
+import subprocess
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -43,7 +45,13 @@ RESAMPLE = getattr(Image, "Resampling", Image).LANCZOS
 OPEN_LID = (-90.0, 12.0, 0.5)
 
 # Flat per-direction shading, so the six sides read as a solid box.
-LIGHT = {"up": 1.0, "south": 0.85, "east": 0.75, "west": 0.70, "north": 0.62, "down": 0.5}
+# The crate models carry "shade": false, so vanilla applies no directional
+# shade at all: BakedQuad.isShade() is false and getShade() returns 1.0 for
+# every face, in the chunk path and in the lid renderer alike. What makes the
+# box read as a box here is the baked-in 0.8 on the two outside textures (see
+# gen_textures.bake_vertical_shade) against the untouched top. Previewing with
+# directional numbers would show a brightness the game never renders.
+LIGHT = {"up": 1.0, "down": 1.0, "north": 1.0, "south": 1.0, "east": 1.0, "west": 1.0}
 NORMAL = {
     "up": (0.0, 1.0, 0.0), "down": (0.0, -1.0, 0.0),
     "north": (0.0, 0.0, -1.0), "south": (0.0, 0.0, 1.0),
@@ -325,16 +333,110 @@ def opened(key):
     ]
 
 
+# ----------------------------------------------------------- 3D rendering ----
+# The renderer above is an orthographic camera with flat per-face shading. That is
+# the right tool for checking geometry and UVs, but it reads as an isometric
+# sticker rather than an object: no perspective, no light falloff, no shadow, so
+# a crate in it does not look 3D. Blender fixes that, and render_blender.py reads
+# the same model JSONs - so this stays a preview of what actually ships.
+#
+# Blender is optional. Without it this module still works on nothing but Pillow,
+# which is why the fallback is not a warning but a normal path.
+BLENDER_RENDER = os.path.join(HERE, "render_blender.py")
+
+
+def find_blender():
+    """Locate a Blender executable, or None. PATH first, then the default
+    install directories, newest version first."""
+    found = shutil.which("blender")
+    if found:
+        return found
+    roots = [
+        os.path.join(base, "Blender Foundation")
+        for base in (os.environ.get("ProgramFiles"), os.environ.get("LOCALAPPDATA"))
+        if base
+    ]
+    roots.append(os.path.expanduser("~/.local/share/blender"))
+    for root in roots:
+        if not os.path.isdir(root):
+            continue
+        versions = sorted(
+            (v for v in os.listdir(root) if os.path.isdir(os.path.join(root, v))),
+            reverse=True,
+        )
+        for version in versions:
+            for exe in ("blender.exe", "blender"):
+                candidate = os.path.join(root, version, exe)
+                if os.path.isfile(candidate):
+                    return candidate
+    return None
+
+
+def blender_frames(keys):
+    """Render every tier through Blender. Returns {key: {mode: png}}, or None if
+    Blender is missing or the render failed - the caller falls back either way."""
+    exe = find_blender()
+    if exe is None:
+        return None
+    argv = [exe, "--background", "--python", BLENDER_RENDER, "--"] + list(keys) + ["--open"]
+    result = subprocess.run(argv, capture_output=True, text=True)
+    if result.returncode != 0:
+        print("  blender exited %d; falling back to the flat renderer" % result.returncode)
+        for line in result.stderr.strip().splitlines()[-6:]:
+            print("    " + line)
+        return None
+    frames = {}
+    for key in keys:
+        entry = {}
+        for mode in ("shut", "open"):
+            path = os.path.join(PREVIEW, "blender", f"{key}_{mode}.png")
+            if os.path.isfile(path):
+                entry[mode] = path
+        if entry:
+            frames[key] = entry
+    return frames or None
+
+
 def main():
     os.makedirs(PREVIEW, exist_ok=True)
-    rows = []
+    keys = [t["key"] for t in tiers.TIERS]
+    frames = None if "--flat" in sys.argv else blender_frames(keys)
+    if frames:
+        print("preview via Blender - perspective camera, real lighting, cast shadow")
+        # A half-rendered sheet is worse than no sheet: flat and 3D tiles side by
+        # side reads as a style choice rather than a failure, so say so loudly.
+        missing = [t["key"] for t in tiers.TIERS if t["key"] not in frames]
+        if missing:
+            print("  WARNING: no Blender render for %s" % ", ".join(missing))
+            print("           those tiles will fall back to the flat renderer")
+    else:
+        print("preview via the built-in flat renderer (Blender not found; --flat forces this)")
+
+    def tile(tier, mode):
+        """One crate as a finished tile: the Blender render when there is one,
+        otherwise the dependency-free orthographic render of the same model."""
+        png = (frames or {}).get(tier["key"], {}).get(mode)
+        if png:
+            return Image.open(png).convert("RGBA").resize((TILE, TILE), RESAMPLE)
+        if mode == "shut":
+            return render(os.path.join(MODELS, f"{tier['key']}_crate.json"))
+        return render(opened(tier["key"]))
+
+    closed = []
     for group in ("normal", "special"):
-        row = []
-        for tier in [t for t in tiers.TIERS if t["group"] == group]:
-            img = render(opened(tier["key"]))
-            row.append(cell(img, f"{tier['num']}. {tier['mc_name']}", "(empty, lid up)"))
-        rows.append(row)
-    build_sheet(rows, os.path.join(PREVIEW, "empty_crates.png"))
+        closed.append([
+            cell(tile(t, "shut"), f"{t['num']}. {t['mc_name']}", "(shut)")
+            for t in tiers.TIERS if t["group"] == group
+        ])
+    build_sheet(closed, os.path.join(PREVIEW, "closed_crates.png"))
+
+    empty = []
+    for group in ("normal", "special"):
+        empty.append([
+            cell(tile(t, "open"), f"{t['num']}. {t['mc_name']}", "(empty, lid up)")
+            for t in tiers.TIERS if t["group"] == group
+        ])
+    build_sheet(empty, os.path.join(PREVIEW, "empty_crates.png"))
 
     # A crate at rest, next to the same crate while its loot window is open. Both
     # the placeable block and the empty block bake the same shut silhouette; only
@@ -342,10 +444,13 @@ def main():
     compare = []
     for key in ("common", "godly", "ghost_unspoken"):
         tier = tiers.get(key)
-        shut = render(os.path.join(MODELS, f"{key}_crate.json"))
-        empty = render(opened(key))
-        compare.append([cell(shut, f"{tier['num']}. {tier['mc_name']}"), cell(empty, f"{tier['num']}. {tier['mc_name']}", "(opened)")])
+        compare.append([
+            cell(tile(tier, "shut"), f"{tier['num']}. {tier['mc_name']}"),
+            cell(tile(tier, "open"), f"{tier['num']}. {tier['mc_name']}", "(opened)"),
+        ])
     build_sheet(compare, os.path.join(PREVIEW, "open_vs_closed.png"))
+
+    print("wrote closed_crates.png, empty_crates.png, open_vs_closed.png in", PREVIEW)
 
 
 if __name__ == "__main__":

@@ -21,6 +21,7 @@
         12,
         15.5
       ],
+      "shade": false,
       "faces": {
         "up": {
           "uv": [
@@ -47,7 +48,7 @@
             16,
             16
           ],
-          "texture": "#side"
+          "texture": "#front"
         },
         "south": {
           "uv": [
@@ -89,6 +90,7 @@
         15.5,
         15.5
       ],
+      "shade": false,
       "faces": {
         "up": {
           "uv": [
@@ -115,7 +117,7 @@
             16,
             3
           ],
-          "texture": "#side"
+          "texture": "#front"
         },
         "south": {
           "uv": [
@@ -124,7 +126,7 @@
             16,
             3
           ],
-          "texture": "#side"
+          "texture": "#front"
         },
         "east": {
           "uv": [

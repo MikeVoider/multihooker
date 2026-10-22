@@ -35,14 +35,26 @@ public class CrateMenu extends AbstractContainerMenu {
    private final Container loot;
    private final String tierKey;
    private final BlockPos pos;
+   /** true when the grid is an opened crate's own storage, which must outlive the window. */
+   private final boolean keepContents;
    private boolean emptied;
 
    /** Server side: the loot has already been rolled and is passed in. */
    public CrateMenu(int id, Inventory playerInventory, Container loot, String tierKey, BlockPos pos) {
+      this(id, playerInventory, loot, tierKey, pos, false);
+   }
+
+   /**
+    * Server side, storage flavour: the container is an already-opened crate's own
+    * inventory. {@code keepContents} stops {@link #removed(Player)} from handing the
+    * grid back to the player, so the crate is real storage rather than a one-shot.
+    */
+   public CrateMenu(int id, Inventory playerInventory, Container loot, String tierKey, BlockPos pos, boolean keepContents) {
       super(MultiHookerRegistry.CRATE_MENU.get(), id);
       this.loot = loot;
       this.tierKey = tierKey;
       this.pos = pos;
+      this.keepContents = keepContents;
       loot.startOpen(playerInventory.player);
       // Raise the crate's lid while this window is up. Server side only: the
       // client learns about it through the block event the entity sends.
@@ -102,8 +114,9 @@ public class CrateMenu extends AbstractContainerMenu {
          crate.removeViewer();
       }
       // Anything the player left behind is given back rather than deleted. Runs
-      // server-side only (the client's copy of the grid is not authoritative).
-      if (!player.level().isClientSide() && !this.emptied) {
+      // server-side only (the client's copy of the grid is not authoritative), and
+      // never for an opened crate's storage, where the grid is the point.
+      if (!player.level().isClientSide() && !this.emptied && !this.keepContents) {
          this.emptied = true;
          clearContainer(player, this.loot);
       }

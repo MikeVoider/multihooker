@@ -23,6 +23,7 @@ import shutil
 
 from PIL import Image
 
+import gen_textures
 import tiers
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -301,11 +302,14 @@ BOXES = [
     ("lid", (0.5, 12, 0.5), (15.5, 15.5, 15.5), "top"),
 ]
 FACE_TEX = {
-    "body": {"up": "side", "down": "side", "north": "side", "south": "front", "east": "side", "west": "side"},
-    "lid": {"up": "top", "down": "side", "north": "side", "south": "side", "east": "side", "west": "side"},
+    "body": {"up": "side", "down": "side", "north": "front", "south": "front", "east": "side", "west": "side"},
+    "lid": {"up": "top", "down": "side", "north": "front", "south": "front", "east": "side", "west": "side"},
 }
 # The lid's sides are only 3/16 of a block tall, so they sample the top 3/16
-# strip of the side texture (its metal band) instead of squashing the whole map.
+# strip of their texture (its metal band) instead of squashing the whole map.
+# The strip comes from the same texture the face below it uses - front on the
+# north/south faces, side on the east/west ones - so the lid carries the body's
+# faces straight up instead of switching to a brighter texture at the seam.
 UV_OVERRIDE = {
     ("lid", "north"): [0, 0, 16, 3],
     ("lid", "south"): [0, 0, 16, 3],
@@ -324,13 +328,24 @@ def crate_textures(key):
 
 
 def box_element(name, face_tex):
-    """One of the crate's two boxes, with the texture slot given per face."""
+    """One of the crate's two boxes, with the texture slot given per face.
+
+    `shade` is per element in 1.21 (BlockElement.shade, copied onto every quad),
+    not per face. Turning it off is what makes the crate's four vertical faces
+    agree: vanilla's directional shading is applied from the quad's WORLD
+    direction, so the chunk-baked body and the lid renderer would otherwise
+    shade the same face two different ways - and the crate's own sides would
+    swap brightness depending on which way it was placed. At 1.0 the four
+    verticals are uniform, the lid's rim matches the panel underneath, and the
+    outside textures are multiplied by 0.8 in gen_textures so the crate still
+    sits at a vanilla block's side brightness.
+    """
     mn, mx = next((mn, mx) for box_name, mn, mx, _ in BOXES if box_name == name)
     faces = {}
     for face, slot in face_tex.items():
         uv = UV_OVERRIDE.get((name, face), [0, 0, 16, 16])
         faces[face] = {"uv": uv, "texture": f"#{slot}"}
-    return {"from": list(mn), "to": list(mx), "faces": faces}
+    return {"from": list(mn), "to": list(mx), "shade": False, "faces": faces}
 
 
 def write_model(key, name, elements):
@@ -420,14 +435,17 @@ def make_inside_texture(key):
 
 
 def facing_blockstate(model):
-    """The crate's latch is on the SOUTH face of the base model, so facing=south
-    is unrotated and the other three facings rotate it clockwise."""
+    """The engraved name is on the EAST face of the base model, and FACING always
+    points at whoever placed the crate, so every facing carries a quarter turn on
+    top of vanilla: the name ends up looking back at the player instead of
+    sitting on their left and right. Keep this +90 in step with
+    client.CrateLidRenderer, which yaws the animated lid by the same amount."""
     return {
         "variants": {
-            "facing=south": {"model": model},
-            "facing=west": {"model": model, "y": 90},
-            "facing=north": {"model": model, "y": 180},
-            "facing=east": {"model": model, "y": 270},
+            "facing=south": {"model": model, "y": 90},
+            "facing=west": {"model": model, "y": 180},
+            "facing=north": {"model": model, "y": 270},
+            "facing=east": {"model": model},
         }
     }
 
@@ -575,6 +593,10 @@ def main():
 
         # copy this tier's textures (side/front/top), plus the derived inside one
         make_inside_texture(key)
+        # ...and only then bake the 0.8 the unshaded models no longer apply: the
+        # hollow interior has to be derived from the pristine wood, or it would
+        # darken along with the outside of the crate.
+        gen_textures.bake_vertical_shade(key)
         for slot in ("side", "front", "top", "inside"):
             src = os.path.join(OUT, f"{key}_crate_{slot}.png")
             dst = os.path.join(RES, "assets", "multihooker", "textures", "block", f"{key}_crate_{slot}.png")

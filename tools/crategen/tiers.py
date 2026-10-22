@@ -173,6 +173,58 @@ TIERS = [
     },
 ]
 
+# Every palette tone is pulled down to this luminance before the art is drawn.
+#
+# WHAT THIS RULE GOVERNS: broad surfaces. The lid, the crate's top, the front and
+# side panels - the large upward-facing areas that take sky light over their whole
+# area.
+#
+# WHY: a near-white surface facing upward catches the full sky light while the
+# sides catch far less, so a pale lid rim or a white body reads as glare. Dimming
+# the lid at render time cannot fix that: it just turns a pale lid into a black one.
+# The fix belongs in the palette, so the brightest tone any tier may use is capped
+# here. Hues are preserved - every tone is scaled toward the same luminance - so
+# the tiers stay as distinguishable as they were.
+#
+# WHAT IS DELIBERATELY OUTSIDE IT: small foreground detail. The extruded tier name
+# (gen_resources.make_letter_texture) is painted pure white, well above this
+# ceiling, and that is a decision rather than an oversight. Those glyphs are a few
+# hundredths of a block across, stand proud of a vertical face, and carry their own
+# bevel - they do not present a broad upward face to the sky, so they cannot glare
+# the way a lid does. The name has to be legible above all else: sitting wood-on-
+# wood at a third of a unit of relief made it unreadable. If the name ever starts
+# glaring in game, that judgement is what to revisit, and the lever is that
+# texture's colour rather than this ceiling.
+#
+# 150 was picked by generating all three candidate ceilings and looking at them
+# side by side: 180 was barely different from uncapped, 120 killed the glare but
+# pushed mythic and unspoken almost to black, and 150 kept every tier clearly
+# readable.
+LUMINANCE_CEILING = 150
+
+
+def _luminance(colour):
+    r, g, b = colour[0], colour[1], colour[2]
+    return 0.299 * r + 0.587 * g + 0.114 * b
+
+
+def _cap(colour):
+    """Scale a colour down to the ceiling, keeping its hue and any alpha."""
+    value = _luminance(colour)
+    if value <= LUMINANCE_CEILING or value == 0:
+        return colour
+    factor = LUMINANCE_CEILING / value
+    return tuple(max(0, min(255, int(round(v * factor)))) for v in colour[:3]) + tuple(colour[3:])
+
+
+for _tier in TIERS:
+    _tier["trim"] = tuple(_cap(c) for c in _tier["trim"])
+    _tier["wood"] = tuple(_cap(c) for c in _tier["wood"])
+    if _tier.get("gem"):
+        _tier["gem"] = tuple(_cap(c) for c in _tier["gem"])
+    if _tier.get("swatches"):
+        _tier["swatches"] = tuple((n, _cap(c)) for n, c in _tier["swatches"])
+
 BY_KEY = {t["key"]: t for t in TIERS}
 
 # item tag that publishes each crate category (see gen_resources.write_crate_tags)
